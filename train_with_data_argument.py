@@ -16,7 +16,11 @@ np.random.seed(seed)
 torch.manual_seed(seed)
 
 # Step 1: Data Preprocessing
-transform = transforms.Compose([transforms.ToTensor()])
+transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.RandomHorizontalFlip(),  # Randomly flip the image horizontally
+    transforms.RandomRotation(15)      # Random rotation up to 15 degrees
+])
 
 # Load CIFAR-10 training and validation datasets
 data_root = './data'
@@ -113,7 +117,7 @@ def train(model, trainloader, validloader, criterion, optimizer, scheduler, epoc
 train_losses, val_losses, train_accuracies, val_accuracies = train(model, trainloader, validloader, criterion, optimizer, scheduler, epochs=100)
 
 # Step 7: Save the model after training
-model_save_path = './vgg16_cifar10.pth'
+model_save_path = './vgg16_cifar10_data_argument.pth'
 torch.save(model.state_dict(), model_save_path)
 print(f"Model saved to {model_save_path}")
 
@@ -142,7 +146,7 @@ plt.legend()
 plt.tight_layout()
 
 # Save the entire figure
-plt.savefig('training_validation_plots.png', dpi=300)
+plt.savefig('training_validation_plots.png', dpi=300) 
 plt.show()
 
 
